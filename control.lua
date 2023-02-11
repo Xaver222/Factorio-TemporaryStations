@@ -9,8 +9,9 @@ global.version_ltn = true
 --]]
 function _print(message, player_index)
   if type(message) == "table" then
-    message[3] = message[2]
-    message[2] = "[img=tempstations-icon]"
+    table.insert(message, 2, "[img=tempstations-icon]")
+    -- message[3] = message[2]
+    -- message[2] = "[img=tempstations-icon]"
   else
     message = "[img=tempstations-icon] " .. message
   end
@@ -28,13 +29,13 @@ end
 local function command_set_personal_train(event)
   set_personal_train(event.player_index, game.players[event.player_index].selected)
 end
-commands.add_command("setpersonaltrain", {"commands.setpersonaltrain"}, command_set_personal_train)
+commands.add_command("tsx-settrain", {"commands.tsx-settrain"}, command_set_personal_train)
 
 local function command_set_default_schedule(event)
   set_default_schedule(game.players[event.player_index].selected)
 end
-commands.add_command("setdefaultschedule", {"commands.setdefaultschedule"}, command_set_default_schedule)
-commands.add_command("tempconfig", {"commands.tempconfig"}, temp_core.gui.open)
+commands.add_command("tsx-setdefault", {"commands.tsx-setdefault"}, command_set_default_schedule)
+commands.add_command("tsx-config", {"commands.tsx-config"}, temp_core.gui.open)
 
 --[[ ----------------------------------------------------------------------------------
         MOD CORE

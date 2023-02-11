@@ -58,15 +58,17 @@ temp_gui.build_ui = function(parent)
   
   frame = main_frame.add {type="frame", caption={"tempstations.frame_title_main"}, direction="vertical"}
   frame.style.horizontally_stretchable = true
+  element = frame.add {type="label", caption={"tempstations.label_text"}}
+  element.style.font = "default-bold"
+  element.style.bottom_margin = 10
   element = frame.add {type="label", caption={"tempstations.label_commands"}}
-  element = frame.add {type="label", caption="/help [font=default-bold]setdefaultschedule[/font]"}
+  element = frame.add {type="label", caption="/help [font=default-bold]tsx-setdefault[/font]"}
   element.style.left_margin = 20
-  element = frame.add {type="label", caption="/help [font=default-bold]setpersonaltrain[/font]"}
+  element = frame.add {type="label", caption="/help [font=default-bold]tsx-settrain[/font]"}
   element.style.left_margin = 20
-  element = frame.add {type="label", caption="/help [font=default-bold]tempconfig[/font]"}
+  element = frame.add {type="label", caption="/help [font=default-bold]tsx-config[/font]"}
   element.style.left_margin = 20
-  element = frame.add {type="label", caption="[font=default-bold]Configuration has been moved to 'Mod Settings'[/font]"}
-  element.style.top_margin = 10
+
   element.style.horizontally_stretchable = true
   element.style.horizontal_align = "center"
   

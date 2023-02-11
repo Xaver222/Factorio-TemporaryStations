@@ -1,4 +1,4 @@
-global.personal_train     = global.personal_train or {}
+global.personal_train     = global.personal_train or {{}, {}}
 global.player_waiting     = global.player_waiting or {}
 global.blacklisted_trains = global.blacklisted_trains or {}
 global.config = global.config or {
@@ -19,11 +19,14 @@ local shortcut_name = "shortcut-temporarystations"
 --]] 
 function get_personal_train(player_index)
   if not global.personal_train[player_index] then return nil end
+  local surface_id = game.players[player_index].surface_index
+  if not global.personal_train[player_index][surface_id] then return nil end
+  local surface_name = game.players[player_index].surface.name:gsub("^%l", string.upper)
   
-  local train = global.personal_train[player_index]
+  local train = global.personal_train[player_index][surface_id]
   if not train or not train.valid then
-    _print({"notifications.personal-train-not-found"}, player_index)
-    global.personal_train[player_index] = nil
+    _print({"notifications.personal-train-not-found", surface_name}, player_index)
+    global.personal_train[player_index][surface_id] = nil
     return nil
   end
 
@@ -31,10 +34,13 @@ function get_personal_train(player_index)
 end
 
 function set_personal_train(player_index, entity)
+  local surface_id = game.players[player_index].surface_index
+  local surface_name = game.players[player_index].surface.name:gsub("^%l", string.upper)
+  
   -- reset personal train
   if not entity then
-    _print({"notifications.clearing-personal-train"}, player_index)
-    global.personal_train[player_index] = nil
+    _print({"notifications.clearing-personal-train", surface_name}, player_index)
+    global.personal_train[player_index][surface_id] = nil
     return
   end
   
@@ -44,8 +50,8 @@ function set_personal_train(player_index, entity)
   end
   
   -- set personal train
-  _print({"notifications.setting-personal-train", entity.train.id}, player_index)
-  global.personal_train[player_index] = entity.train
+  _print({"notifications.setting-personal-train", surface_name, entity.train.id}, player_index)
+  global.personal_train[player_index][surface_id] = entity.train
 end
 
 function set_default_schedule(entity)
@@ -103,7 +109,7 @@ local temp_core = {
 --
 temp_core.shortcut_toggled = function(event)
   if not event.prototype_name or event.prototype_name ~= shortcut_name then return end
-  
+ 
   local player     = game.players[event.player_index]
   local is_toggled = player.is_shortcut_toggled(shortcut_name)
   

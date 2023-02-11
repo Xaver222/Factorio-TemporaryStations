@@ -1,11 +1,11 @@
 {
     "name": "TemporaryStations_X_c",
-    "version": "0.5.8",
+    "version": "0.6.0",
     "title": "Temporary Stations X (Wait Conditions and Personal Trains)",
     "author": "Xaver222",
     "contact": "",
     "homepage": "",
     "factorio_version": "1.1",
     "dependencies": ["base >= 1.1"],
-    "description": "The mod lets you control the behaviour of trains upon arriving at temporary stations. The train either switches to manual mode or waits with custom conditions.\nYou can also define a Train as your Personal Train and use the shortcut to call that train to your position."
+    "description": "The mod lets you control the behaviour of trains upon arriving at temporary stations. The train either switches to manual mode or waits with custom conditions.\nYou can also define a Train as your Personal Train and use the shortcut to call that train to your position.\n\nUse the command /tsx-setdefault and select a Train to use its first Station as new default Temp Station settings\nUse the command /tsx-config for reset of personal Train and display Help Window."
 }
