@@ -95,7 +95,7 @@ function get_personal_front_mover(player_index)
   local train = get_personal_train(player_index)
   if not train then return nil end
   
-  return global.personal_train[player_index].locomotives["front_movers"][1]
+  return train.locomotives["front_movers"][1]
 end
 
 --[[ ----------------------------------------------------------------------------------
@@ -216,9 +216,11 @@ temp_core.train_state_changed = function(event)
   -- check if modify temp-station apply only for personal-train
   if global.config.personal_train_only == true then
     local is_personal_train = false
-    for _, train in pairs(global.personal_train) do
-      if train == event.train then
-        is_personal_train = true
+    for _, surface in pairs(global.personal_train) do
+      for _, train in pairs(surface) do
+        if train == event.train then
+          is_personal_train = true
+        end
       end
     end
     if is_personal_train == false then
@@ -263,9 +265,11 @@ temp_core.train_state_changed = function(event)
   end
   
   -- check if train is a personal train
-  for index, train in pairs(global.personal_train) do
-    if train == event.train then
-      game.players[index].set_shortcut_toggled(shortcut_name, false)
+  for index, surface in pairs(global.personal_train) do
+    for index, train in pairs(surface) do
+      if train == event.train then
+        game.players[index].set_shortcut_toggled(shortcut_name, false)
+      end
     end
   end
 end

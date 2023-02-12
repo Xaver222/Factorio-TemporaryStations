@@ -3,7 +3,7 @@ data:extend({
         type = "string-setting",
         name = "tempstations-behaviour",
         setting_type = "runtime-global",
-        default_value = "apply-custom-conditions",
+        default_value = "switch-to-manual",
         allowed_values = {"switch-to-manual", "apply-custom-conditions"},
     },
     {
@@ -34,6 +34,6 @@ data:extend({
         type = "bool-setting",
         name = "tempstations-openschedule",
         setting_type = "runtime-global",
-        default_value = false
+        default_value = true
     },
 })
