@@ -1,38 +1,38 @@
 data:extend({
     {
         type = "string-setting",
-        name = "tempstations-behaviour",
+        name = "tsx-behaviour",
         setting_type = "runtime-global",
         default_value = "switch-to-manual",
         allowed_values = {"switch-to-manual", "apply-custom-conditions"},
     },
     {
         type = "bool-setting",
-        name = "tempstations-personaltrainonly",
+        name = "tsx-personaltrainonly",
         setting_type = "runtime-global",
         default_value = true
     },
     {
         type = "bool-setting",
-        name = "tempstations-removetemps",
+        name = "tsx-removetemps",
         setting_type = "runtime-global",
         default_value = true
     },
     {
         type = "int-setting",
-        name = "tempstations-searchradius",
+        name = "tsx-searchradius",
         setting_type = "runtime-global",
         default_value = 20
     },
     {
         type = "bool-setting",
-        name = "tempstations-rendertarget",
+        name = "tsx-rendertarget",
         setting_type = "runtime-global",
         default_value = true
     },
     {
         type = "bool-setting",
-        name = "tempstations-openschedule",
+        name = "tsx-openschedule",
         setting_type = "runtime-global",
         default_value = true
     },

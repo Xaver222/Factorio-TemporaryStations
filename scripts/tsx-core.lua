@@ -2,13 +2,12 @@ global.personal_train     = global.personal_train or {{}, {}}
 global.player_waiting     = global.player_waiting or {}
 global.blacklisted_trains = global.blacklisted_trains or {}
 global.config = global.config or {
-  switch_to_manual = false,
-  apply_custom_conditions = true,
-  
+  switch_to_manual = true,
+  apply_custom_conditions = false,
+  openschedule = true,
+  personal_train_only = true,
   remove_all = true,
-  
   default_conditions = {{type="inactivity", compare_type="and", ticks=300}},
-  
   search_radius = 20,
   render_target = true,
 }
@@ -98,16 +97,34 @@ function get_personal_front_mover(player_index)
   return train.locomotives["front_movers"][1]
 end
 
+function reset_personal_train_config(player_index)
+  _print({"notifications.clearing-config"}, player_index)
+  global.personal_train     = {{}, {}}
+  global.player_waiting     = {}
+  global.blacklisted_trains = {}
+  global.config = {
+    switch_to_manual = true,
+    apply_custom_conditions = false,
+    openschedule = true,
+    personal_train_only = true,
+    remove_all = true,
+    default_conditions = {{type="inactivity", compare_type="and", ticks=300}},
+    search_radius = 20,
+    render_target = true,
+  }
+  return
+end
+
 --[[ ----------------------------------------------------------------------------------
         CORE
 --]] 
-local temp_core = {
-  gui = require "temp-gui"
+local tsx_core = {
+  gui = require "tsx-gui"
 }
 
--- temp_core.shortcut_toggled 
+-- tsx_core.shortcut_toggled 
 --
-temp_core.shortcut_toggled = function(event)
+tsx_core.shortcut_toggled = function(event)
   if not event.prototype_name or event.prototype_name ~= shortcut_name then return end
  
   local player     = game.players[event.player_index]
@@ -119,28 +136,28 @@ temp_core.shortcut_toggled = function(event)
 
     -- call the train
     if is_toggled == false then
-      temp_core.call_personal_train(event, train)
+      tsx_core.call_personal_train(event, train)
 
     -- stop the train dead in the tracks
     else
-      temp_core.stop_personal_train(event, train)
+      tsx_core.stop_personal_train(event, train)
     end
     return
   end
   
   -- toggle configuration gui
-  if temp_gui.is_open(event) == false then
-    temp_core.gui.open(event)
+  if tsx_gui.is_open(event) == false then
+    tsx_core.gui.open(event)
     player.set_shortcut_toggled(shortcut_name, true)
   else
-    temp_core.gui.close(event)
+    tsx_core.gui.close(event)
     player.set_shortcut_toggled(shortcut_name, false)
   end
 end
 
--- temp_core.on_gui_opened 
+-- tsx_core.on_gui_opened 
 --
-temp_core.on_gui_opened = function(event)
+tsx_core.on_gui_opened = function(event)
   if not event.entity or not global.player_waiting[event.player_index] then return end
   
   if event.entity.train ~= nil then
@@ -150,18 +167,18 @@ temp_core.on_gui_opened = function(event)
   global.player_waiting[event.player_index] = nil
 end
 
--- temp_core.configuration_closed 
+-- tsx_core.configuration_closed 
 --
-temp_core.configuration_closed = function(event)
-  if not event.element or event.element.name ~= "tempstations-main-frame" then return end
+tsx_core.configuration_closed = function(event)
+  if not event.element or event.element.name ~= "tsx-main-frame" then return end
   
-  temp_core.gui.close(event)
+  tsx_core.gui.close(event)
   game.players[event.player_index].set_shortcut_toggled(shortcut_name, false)
 end
 
--- temp_core.call_personal_train 
+-- tsx_core.call_personal_train 
 --
-temp_core.call_personal_train = function(event, train)
+tsx_core.call_personal_train = function(event, train)
   local player = game.players[event.player_index]
   
   -- find closest rail segment
@@ -196,9 +213,9 @@ temp_core.call_personal_train = function(event, train)
   player.set_shortcut_toggled(shortcut_name, true)
 end
 
--- temp_core.stop_personal_train 
+-- tsx_core.stop_personal_train 
 --
-temp_core.stop_personal_train = function(event, train)
+tsx_core.stop_personal_train = function(event, train)
   local player = game.players[event.player_index]
 
   train.manual_mode = true
@@ -206,14 +223,14 @@ temp_core.stop_personal_train = function(event, train)
   player.set_shortcut_toggled(shortcut_name, false)
 end
 
--- temp_core.train_state_changed 
+-- tsx_core.train_state_changed 
 --
-temp_core.train_state_changed = function(event)
+tsx_core.train_state_changed = function(event)
   if global.blacklisted_trains[event.train.id] then
     return
   end
 
-  -- check if modify temp-station apply only for personal-train
+  -- check if modify tempstation apply only for personal train
   if global.config.personal_train_only == true then
     local is_personal_train = false
     for _, surface in pairs(global.personal_train) do
@@ -266,7 +283,7 @@ temp_core.train_state_changed = function(event)
   
   -- check if train is a personal train
   for index, surface in pairs(global.personal_train) do
-    for index, train in pairs(surface) do
+    for _, train in pairs(surface) do
       if train == event.train then
         game.players[index].set_shortcut_toggled(shortcut_name, false)
       end
@@ -274,23 +291,23 @@ temp_core.train_state_changed = function(event)
   end
 end
 
-temp_core.player_driving_state_changed = function(event)
+tsx_core.player_driving_state_changed = function(event)
   if not global.config.openschedule or game.players[event.player_index].driving == false then return end 
   if not event.entity or not event.entity.train then return end
   
   if event.entity.train == get_personal_train(event.player_index) then
-    temp_core.on_open_schedule(event)
+    tsx_core.on_open_schedule(event)
   end
 end
 
-temp_core.on_open_schedule = function(event)
+tsx_core.on_open_schedule = function(event)
   local loco = get_personal_front_mover(event.player_index)
   if not loco then return end
   
   game.players[event.player_index].opened = loco
 end
 
-temp_core.locate_personal_train = function(event)
+tsx_core.locate_personal_train = function(event)
   local loco = get_personal_front_mover(event.player_index)
   if not loco then return end
   
@@ -300,16 +317,16 @@ end
 --[[ ----------------------------------------------------------------------------------
         EVENTS
 --]] 
-script.on_event({defines.events.on_lua_shortcut}, temp_core.shortcut_toggled)
-script.on_event({defines.events.on_gui_closed}, temp_core.configuration_closed)
-script.on_event({defines.events.on_gui_opened}, temp_core.on_gui_opened)
-script.on_event({defines.events.on_train_changed_state}, temp_core.train_state_changed)
-script.on_event({defines.events.on_player_driving_changed_state}, temp_core.player_driving_state_changed)
-script.on_event("temp-call-a-train", function(event)
+script.on_event({defines.events.on_lua_shortcut}, tsx_core.shortcut_toggled)
+script.on_event({defines.events.on_gui_closed}, tsx_core.configuration_closed)
+script.on_event({defines.events.on_gui_opened}, tsx_core.on_gui_opened)
+script.on_event({defines.events.on_train_changed_state}, tsx_core.train_state_changed)
+script.on_event({defines.events.on_player_driving_changed_state}, tsx_core.player_driving_state_changed)
+script.on_event("tsx-call-a-train", function(event)
   event.prototype_name = shortcut_name
-  temp_core.shortcut_toggled(event) 
+  tsx_core.shortcut_toggled(event) 
 end)
-script.on_event("temp-open-schedule", temp_core.on_open_schedule)
-script.on_event("temp-locate", temp_core.locate_personal_train)
+script.on_event("tsx-open-schedule", tsx_core.on_open_schedule)
+script.on_event("tsx-locate", tsx_core.locate_personal_train)
 
-return temp_core
+return tsx_core

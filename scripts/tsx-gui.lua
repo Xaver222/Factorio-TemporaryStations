@@ -1,57 +1,57 @@
-temp_gui = {
+tsx_gui = {
 }
 
-temp_gui.open = function(event)
-  if temp_gui.is_open(event) then return end
+tsx_gui.open = function(event)
+  if tsx_gui.is_open(event) then return end
   local player = game.players[event.player_index]
   
-  local main_frame = temp_gui.build_ui(player.gui.center)
+  local main_frame = tsx_gui.build_ui(player.gui.center)
   
   local train = get_personal_train(event.player_index)
   if train ~= nil then
-    temp_gui.build_train_set(main_frame["tempstations-personal"]["instruction-frame"]["instruction-flow"], train)
+    tsx_gui.build_train_set(main_frame["tsx-personal"]["instruction-frame"]["instruction-flow"], train)
   else
-    temp_gui.build_train_notset(main_frame["tempstations-personal"]["instruction-frame"]["instruction-flow"])
+    tsx_gui.build_train_notset(main_frame["tsx-personal"]["instruction-frame"]["instruction-flow"])
   end
   
   player.opened = main_frame
 end
 
-temp_gui.close = function(event)
-  local frame = game.players[event.player_index].gui.center["tempstations-main-frame"]
+tsx_gui.close = function(event)
+  local frame = game.players[event.player_index].gui.center["tsx-main-frame"]
   
   if frame ~= nil then
     frame.destroy()
   end
 end
 
-temp_gui.is_open = function(event)
-  local frame = game.players[event.player_index].gui.center["tempstations-main-frame"]
+tsx_gui.is_open = function(event)
+  local frame = game.players[event.player_index].gui.center["tsx-main-frame"]
   return frame and true or false
 end
 
-temp_gui.button_clicked = function(event)
-  if not event.element or not temp_gui.is_open(event) then return end
+tsx_gui.button_clicked = function(event)
+  if not event.element or not tsx_gui.is_open(event) then return end
   
-  local main_frame = game.players[event.player_index].gui.center["tempstations-main-frame"]
+  local main_frame = game.players[event.player_index].gui.center["tsx-main-frame"]
   
-  if event.element.name == "tempstations-button-clear" then
+  if event.element.name == "tsx-button-clear" then
     set_personal_train(event.player_index, nil)  
-    temp_gui.build_train_notset(main_frame["tempstations-personal"]["instruction-frame"]["instruction-flow"])
+    tsx_gui.build_train_notset(main_frame["tsx-personal"]["instruction-frame"]["instruction-flow"])
     return
   end
   
-  if event.element.name == "tempstations-button-select" then
+  if event.element.name == "tsx-button-select" then
     global.player_waiting[event.player_index] = true
-    temp_gui.build_train_waiting(main_frame["tempstations-personal"]["instruction-frame"]["instruction-flow"])
+    tsx_gui.build_train_waiting(main_frame["tsx-personal"]["instruction-frame"]["instruction-flow"])
     return
   end
 end
 
-temp_gui.build_ui = function(parent)
+tsx_gui.build_ui = function(parent)
   local frame, container, element
   
-  local main_frame = parent.add {type="frame", style="outer_frame_without_shadow", name="tempstations-main-frame", direction="vertical"}
+  local main_frame = parent.add {type="frame", style="outer_frame_without_shadow", name="tsx-main-frame", direction="vertical"}
   main_frame.style.minimal_width = 320
   main_frame.style.margin  = 0
   main_frame.style.padding = 0
@@ -68,11 +68,13 @@ temp_gui.build_ui = function(parent)
   element.style.left_margin = 20
   element = frame.add {type="label", caption="/help [font=default-bold]tsx-config[/font]"}
   element.style.left_margin = 20
+  element = frame.add {type="label", caption="/help [font=default-bold]tsx-reset[/font]"}
+  element.style.left_margin = 20
 
   element.style.horizontally_stretchable = true
   element.style.horizontal_align = "center"
   
-  frame = main_frame.add {type="frame", caption={"tempstations.frame_title_personal"}, name="tempstations-personal", direction="vertical"}
+  frame = main_frame.add {type="frame", caption={"tempstations.frame_title_personal"}, name="tsx-personal", direction="vertical"}
   frame.style.horizontally_stretchable = true
   
   local flow = frame.add {type="flow", direction="horizontal", name="instruction-frame"}
@@ -90,7 +92,7 @@ temp_gui.build_ui = function(parent)
   return main_frame
 end
 
-temp_gui.build_train_set = function(parent, train)
+tsx_gui.build_train_set = function(parent, train)
   parent.parent["train-preview"].entity = train.front_stock
   
   parent.clear()
@@ -106,12 +108,12 @@ temp_gui.build_train_set = function(parent, train)
   flow.style.top_margin = 15
   flow.style.horizontal_align="right"
   
-  local element = flow.add {type="button", name="tempstations-button-clear", caption={"tempstations.button_clear"}, style="map_generator_preview_button"}
+  local element = flow.add {type="button", name="tsx-button-clear", caption={"tempstations.button_clear"}, style="map_generator_preview_button"}
   element.style.font = "default-bold"
   element.style.width = 162
 end
 
-temp_gui.build_train_notset = function(parent)
+tsx_gui.build_train_notset = function(parent)
   parent.clear()
 
   parent.add {type="label", caption={"tempstations.label_instruction_1", "[font=default-bold]", "[/font]"}}
@@ -125,12 +127,12 @@ temp_gui.build_train_notset = function(parent)
   flow.style.top_margin = 15
   flow.style.horizontal_align="right"
   
-  local element = flow.add {type="button", name="tempstations-button-select", caption={"tempstations.button_select"}, style="map_generator_preview_button"}
+  local element = flow.add {type="button", name="tsx-button-select", caption={"tempstations.button_select"}, style="map_generator_preview_button"}
   element.style.font = "default-bold"
   element.style.width = 162
 end
 
-temp_gui.build_train_waiting = function(parent)
+tsx_gui.build_train_waiting = function(parent)
   parent.clear()
 
   parent.add {type="label", caption={"tempstations.label_instruction_1", "", ""}}
@@ -144,12 +146,12 @@ temp_gui.build_train_waiting = function(parent)
   flow.style.top_margin = 15
   flow.style.horizontal_align="right"
    
-  local element = flow.add {type="button", name="tempstations-button-waiting", caption={"tempstations.button_waiting"}, style="map_generator_preview_button"}
+  local element = flow.add {type="button", name="tsx-button-waiting", caption={"tempstations.button_waiting"}, style="map_generator_preview_button"}
   element.style.font = "default-bold"
   element.style.width = 162
   element.enabled = false
 end
 
-script.on_event({defines.events.on_gui_click}, temp_gui.button_clicked)
+script.on_event({defines.events.on_gui_click}, tsx_gui.button_clicked)
 
-return temp_gui
+return tsx_gui

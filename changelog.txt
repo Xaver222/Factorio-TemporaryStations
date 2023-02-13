@@ -1,8 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.6.2
+Date: 13. 02. 2023
+  Bugfixes:
+    - Fixed another Manuel Mode Error in combination with Space Exploration.
+  Changes:
+    - Changed Mod Prefix from 'temp' to 'tsx', this makes debugging much easier.
+---------------------------------------------------------------------------------------------------
 Version: 0.6.1
 Date: 12. 02. 2023
   Bugfixes:
-    - Fixed it Manuel Mode and double Locomotive Code from 0.6.0 Version
+    - Fixed Error in Manuel Mode and double Locomotive Function.
 ---------------------------------------------------------------------------------------------------
 Version: 0.6.0
 Date: 11. 02. 2023

@@ -1,4 +1,4 @@
-local temp_shortcut = {
+local tsx_shortcut = {
   type = "shortcut",
   name = "shortcut-temporarystations",
   action = "lua",
@@ -27,34 +27,34 @@ local temp_shortcut = {
   },
 }
 
-local temp_sprite = {
+local tsx_sprite = {
   type = "sprite",
-  name = "tempstations-icon",
+  name = "tsx-icon",
   filename = "__TemporaryStations_X_c__/graphics/icons/shortcut.png",
   width = 32,
   height = 32,
 --  flags = {"gui"},
 }
 
-local temp_input_call = {
+local tsx_input_call = {
   type = "custom-input",
-  name = "temp-call-a-train",
+  name = "tsx-call-a-train",
   key_sequence = "",
   consuming = "game-only"
 }
 
-local temp_input_open = {
+local tsx_input_open = {
   type = "custom-input",
-  name = "temp-open-schedule",
+  name = "tsx-open-schedule",
   key_sequence = "",
   consuming = "game-only"
 }
 
-local temp_input_locate = {
+local tsx_input_locate = {
   type = "custom-input",
-  name = "temp-locate",
+  name = "tsx-locate",
   key_sequence = "",
   consuming = "game-only"
 }
 
-data:extend({temp_shortcut, temp_sprite, temp_input_call, temp_input_open, temp_input_locate})
+data:extend({tsx_shortcut, tsx_sprite, tsx_input_call, tsx_input_open, tsx_input_locate})

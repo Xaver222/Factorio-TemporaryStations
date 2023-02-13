@@ -1,1 +1,1 @@
-global.config.personal_train_only = settings.global["tempstations-personaltrainonly"].value
+global.config.personal_train_only = settings.global["tsx-personaltrainonly"].value
