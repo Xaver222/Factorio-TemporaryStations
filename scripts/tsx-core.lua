@@ -1,4 +1,4 @@
-global.personal_train     = global.personal_train or {{}, {}}
+global.personal_train     = global.personal_train or {}
 global.player_waiting     = global.player_waiting or {}
 global.blacklisted_trains = global.blacklisted_trains or {}
 global.config = global.config or {
@@ -35,6 +35,10 @@ end
 function set_personal_train(player_index, entity)
   local surface_id = game.players[player_index].surface_index
   local surface_name = game.players[player_index].surface.name:gsub("^%l", string.upper)
+  
+  if not global.personal_train[player_index] then
+    global.personal_train[player_index] = {}
+  end
   
   -- reset personal train
   if not entity then
@@ -99,7 +103,7 @@ end
 
 function reset_personal_train_config(player_index)
   _print({"notifications.clearing-config"}, player_index)
-  global.personal_train     = {{}, {}}
+  global.personal_train     = {}
   global.player_waiting     = {}
   global.blacklisted_trains = {}
   global.config = {
